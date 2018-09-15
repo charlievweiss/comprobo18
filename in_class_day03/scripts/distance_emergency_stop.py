@@ -5,11 +5,10 @@ Created on 29 July 2012
 @author: Lisa Simpson
 """
 
-from __future__ import print_function, division
+from __future__ import print_function, division #for python2 users
 import rospy
-from neato_node.msg import Bump
+# from neato_node.msg import Bump #bump package
 from geometry_msgs.msg import Twist, Vector3
-import atexit
 
 class EmergencyStopNode(object):
     def __init__(self):
@@ -17,7 +16,6 @@ class EmergencyStopNode(object):
         rospy.Subscriber('/bump', Bump, self.process_bump)
         self.pub = rospy.Publisher('/cmd_vel', Twist, queue_size=10)
         self.desired_velocity = 0.3
-        atexit.register(self.exit_handler)
 
     def process_bump(self, msg):
         if any((msg.leftFront, msg.leftSide, msg.rightFront, msg.rightSide)):
@@ -28,11 +26,6 @@ class EmergencyStopNode(object):
         while not rospy.is_shutdown():
             self.pub.publish(Twist(linear=Vector3(x=self.desired_velocity)))
             r.sleep()
-
-    def exit_handler(self):
-        self.desired_velocity = 0.0
-        print("thank you for shopping")
-        
 
 if __name__ == '__main__':
     estop = EmergencyStopNode()
