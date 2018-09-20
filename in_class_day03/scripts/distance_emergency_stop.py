@@ -1,32 +1,39 @@
 #!/usr/bin/env python
 
 """
-Created on 29 July 2012
-@author: Lisa Simpson
+This might work
+UPDATE: It works
 """
 
 from __future__ import print_function, division #for python2 users
 import rospy
 # from neato_node.msg import Bump #bump package
 from geometry_msgs.msg import Twist, Vector3
+from sensor_msgs.msg import LaserScan
 
-class EmergencyStopNode(object):
+class DistanceEmergencyStopNode(object):
     def __init__(self):
         rospy.init_node('emergency_stop')
-        rospy.Subscriber('/bump', Bump, self.process_bump)
+        rospy.Subscriber('/scan', LaserScan, self.process_scan)
         self.pub = rospy.Publisher('/cmd_vel', Twist, queue_size=10)
-        self.desired_velocity = 0.3
+        self.objdistance = 1.0
+        self.linearVel = 0.3
 
-    def process_bump(self, msg):
-        if any((msg.leftFront, msg.leftSide, msg.rightFront, msg.rightSide)):
-            self.desired_velocity = 0.0
+    def process_scan(self, m):
+        if m.ranges[0] != 0.0:
+            self.objdistance = m.ranges[0]
+
+    def interpret_scan(self):
+        if self.objdistance < .5:
+            self.linearVel = 0.0
 
     def run(self):
         r = rospy.Rate(10)
         while not rospy.is_shutdown():
-            self.pub.publish(Twist(linear=Vector3(x=self.desired_velocity)))
+            self.interpret_scan()
+            self.pub.publish(Twist(linear=Vector3(x=self.linearVel)))
             r.sleep()
 
 if __name__ == '__main__':
-    estop = EmergencyStopNode()
+    estop = DistanceEmergencyStopNode()
     estop.run()
