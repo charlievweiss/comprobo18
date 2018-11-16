@@ -18,15 +18,15 @@
 
     <!-- Describe the tags -->
     <rosparam param="tag_descriptions">[
-      {id: 0, size: 0.4841875},
-      {id: 1, size: 0.4841875},
-      {id: 2, size: 0.4841875},
-      {id: 3, size: 0.4841875},
-      {id: 4, size: 0.4841875},
-      {id: 5, size: 0.4841875},
-      {id: 6, size: 0.4841875},
-      {id: 7, size: 0.4841875},
-      {id: 9, size: 0.4841875},
+      {id: 0, size: 0.4445},
+      {id: 1, size: 0.4445},
+      {id: 2, size: 0.4445},
+      {id: 3, size: 0.4445},
+      {id: 4, size: 0.4445},
+      {id: 5, size: 0.4445},
+      {id: 6, size: 0.4445},
+      {id: 7, size: 0.4445},
+      {id: 9, size: 0.4445},
       ]
     </rosparam>
   </node>
